@@ -1,0 +1,61 @@
+{% macro logo(class_name='brand-mark') %}
+<svg class="{{ class_name }}" viewBox="0 0 52 52" role="img" aria-label="ShopSphere logo" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="26" cy="23" r="16" fill="none" stroke="currentColor" stroke-width="2"/>
+  <path d="M10 23h32M26 7c5 4.5 7.5 10 7.5 16S31 34.5 26 39M26 7c-5 4.5-7.5 10-7.5 16S21 34.5 26 39M12 15.5c8 3 20 3 28 0M12 30.5c8-3 20-3 28 0" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M29 29h12l3-9H32M29 29l-2-7h-3M33 34.5a2 2 0 1 0 0 .01M41 34.5a2 2 0 1 0 0 .01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+{% endmacro %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ShopSphere{% endblock %} | Luxury, thoughtfully found</title>
+  <link rel="icon" href="{{ url_for('static', filename='images/logo.svg') }}" type="image/svg+xml">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg site-nav" data-bs-theme="dark">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('index') }}">
+        {{ logo() }}<span>Shop<span class="gold-text">Sphere</span></span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('catalog.listing') }}">Shop</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('search.search') }}">Search</a></li>
+          {% if current_user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('profile.dashboard') }}">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('orders.history') }}">Orders</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('profile.notifications') }}">Alerts</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('wishlist.view') }}">Wishlist</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('cart.view') }}">Bag</a></li>
+          {% endif %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}#collections">Collections</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}#story">Our story</a></li>
+          {% if current_user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link gold-text" href="{{ url_for('profile.dashboard') }}">Hi, {{ current_user.first_name }}</a></li>
+            <li class="nav-item"><a class="btn btn-outline-gold btn-sm px-3" href="{{ url_for('auth.logout') }}">Sign out</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Sign in</a></li>
+            <li class="nav-item"><a class="btn btn-gold btn-sm px-3" href="{{ url_for('auth.register') }}">Join ShopSphere</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}<div class="container flash-stack">{% for category, message in messages %}<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>{% endfor %}</div>{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer premium-footer"><div class="container"><div class="footer-main"><div><a class="footer-brand" href="{{ url_for('index') }}">{{ logo('footer-mark') }}<span>Shop<span class="gold-text">Sphere</span></span></a><p class="footer-note mt-3">Curated Indian luxury for a life well lived.</p></div><div><p class="footer-label">Discover</p><a href="{{ url_for('index') }}#story">About us</a><a href="{{ url_for('catalog.listing') }}">The edit</a><a href="{{ url_for('index') }}#showcase">New arrivals</a></div><div><p class="footer-label">Help</p><a href="mailto:hello@shopsphere.local">Contact</a><a href="mailto:support@shopsphere.local">Support</a><a href="mailto:hello@shopsphere.local?subject=ShopSphere%20FAQ">FAQs</a></div><div><p class="footer-label">Legal</p><a href="{{ url_for('index') }}#story">Privacy policy</a><a href="{{ url_for('index') }}#story">Terms of service</a><span class="social-links"><a href="https://instagram.com" rel="noopener">Instagram</a><a href="https://pinterest.com" rel="noopener">Pinterest</a></span></div></div><div class="footer-bottom"><span class="footer-note">© 2026 ShopSphere · Made with intention in India</span><span class="footer-note">Secure mock checkout · All prices in ₹</span></div></div></footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

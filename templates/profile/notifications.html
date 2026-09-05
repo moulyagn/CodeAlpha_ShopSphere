@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}<section class="commerce-page"><div class="container"><p class="eyebrow">Stay in the know</p><h1>Your <span class="gold-text">notifications.</span></h1><div class="notification-list">{% for item in notifications %}<article class="notification-row"><span class="notification-dot"></span><div><strong>{{ item.title }}</strong><p>{{ item.message }}</p><small>{{ item.created_at.strftime('%d %b %Y · %H:%M') }}</small></div></article>{% else %}<div class="empty-state"><h2>Nothing new.</h2><p class="section-copy">Order and account updates will appear here.</p></div>{% endfor %}</div></div></section>{% endblock %}

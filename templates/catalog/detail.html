@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ product.display_title }}{% endblock %}
+{% block content %}
+<section class="detail-page"><div class="container">
+  <div class="breadcrumb-line"><a href="{{ url_for('catalog.listing') }}">The edit</a> / {{ product.category.name }}</div>
+  <div class="detail-layout">
+    <div class="gallery">
+      <div class="gallery-main"><img id="gallery-main-image" src="{{ product.primary_image or product.image_list[0] }}" alt="{{ product.display_title }}" onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/product-fallback.svg') }}';"></div>
+      <div class="gallery-thumbs">{% for image in product.image_list %}<button type="button" class="gallery-thumb {% if loop.first %}active{% endif %}" data-image="{{ image }}"><img src="{{ image }}" alt="{{ product.display_title }} view {{ loop.index }}" onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/product-fallback.svg') }}';"></button>{% endfor %}</div>
+      <p class="zoom-hint">Click the image to zoom</p>
+    </div>
+    <div class="detail-copy">
+      <p class="product-brand">{{ product.brand.name }} / {{ product.category.name }}</p><h1>{{ product.display_title }}</h1><div class="detail-rating">★ {{ product.rating }} <span>{{ product.review_count }} verified reviews</span></div>
+      <div class="detail-price"><strong>₹{{ "{:,.0f}".format(product.price) }}</strong><del>₹{{ "{:,.0f}".format(product.mrp) }}</del><span>{{ product.discount }}% off</span></div><p class="detail-description">{{ product.description }}</p>
+      <div class="delivery-box"><strong>Arrives in {{ product.delivery_estimate.replace('Delivery in ', '') }}</strong><span>Free delivery on orders above ₹1,999</span></div>
+      <div class="detail-actions"><form method="post" action="{{ url_for('cart.add', product_id=product.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="next" value="{{ request.path }}"><button class="btn btn-gold btn-lg">Add to bag</button></form><form method="post" action="{{ url_for('wishlist.add', product_id=product.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="next" value="{{ request.path }}"><button class="btn btn-outline-gold btn-lg">♡ Wishlist</button></form><form method="post" action="{{ url_for('cart.add', product_id=product.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="next" value="{{ url_for('cart.view') }}"><button class="btn btn-outline-light btn-lg">Buy now</button></form></div>
+      <p class="stock-note">{% if product.stock > 0 %}{{ product.stock }} pieces available{% else %}Currently out of stock{% endif %} · Sold by {{ product.seller }}</p>
+    </div>
+  </div>
+  <div class="detail-lower"><div><p class="eyebrow">Details</p><h2>Made to be <span class="gold-text">lived with.</span></h2><ul class="highlight-list">{% for feature in product.feature_list %}<li>{{ feature }}</li>{% endfor %}</ul></div><div><p class="eyebrow">Specifications</p><table class="spec-table">{% for key, value in product.spec_map.items() %}<tr><th>{{ key }}</th><td>{{ value }}</td></tr>{% endfor %}</table></div></div>
+  <section class="related-section"><div class="section-heading"><p class="eyebrow">You may also like</p><h2>Related finds</h2></div><div class="product-grid">{% for product in related %}{% include "catalog/_product_card.html" %}{% endfor %}</div></section>
+  <section class="related-section"><div class="section-heading"><p class="eyebrow">Complete the ritual</p><h2>Frequently bought together</h2></div><div class="product-grid">{% for product in bundle %}{% include "catalog/_product_card.html" %}{% endfor %}</div></section>
+</div></section>
+{% endblock %}

@@ -1,0 +1,4 @@
+<article class="product-card">
+  <a href="{{ url_for('catalog.detail', slug=product.slug) }}" class="product-image-wrap"><img src="{{ product.primary_image or product.image_list[0] }}" alt="{{ product.display_title }}" loading="lazy" onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/product-fallback.svg') }}';"><span class="product-discount">{{ product.discount }}% off</span></a>
+  <div class="product-card-body"><p class="product-brand">{{ product.brand.name }}</p><h3><a href="{{ url_for('catalog.detail', slug=product.slug) }}">{{ product.display_title }}</a></h3><div class="product-rating">★ {{ product.rating }} <span>({{ product.review_count }})</span></div><div class="price-row"><strong>₹{{ "{:,.0f}".format(product.price) }}</strong><del>₹{{ "{:,.0f}".format(product.mrp) }}</del></div><p class="delivery-note">{{ product.delivery_estimate }}</p></div>
+</article>
