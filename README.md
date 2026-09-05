@@ -83,4 +83,4 @@ ShopSphere combines intelligent product discovery with a premium shopping experi
 
 ---
 
-> **Built with ❤️ to redefine the online shopping experience through AI and modern web technologies.**
+*Built for CodeAlpha — Full Stack Development internship 2026*
